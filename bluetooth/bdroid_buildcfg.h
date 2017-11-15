@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The CyanogenMod Project
+ * Copyright (C) 2016 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,32 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME   "MotoG3"
+#include <cutils/properties.h>
+#include <string.h>
+
+inline const char* BtmGetDefaultName()
+{
+	char device[PROPERTY_VALUE_MAX];
+	property_get("ro.boot.device", device, "");
+
+	if (!strcmp("surnia", device)) {
+		return "Moto E";
+	} else if (!strcmp("osprey", device)) {
+		return "Moto G";
+	} else if (!strcmp("merlin", device)) {
+		return "Moto G Turbo";
+	} else if (!strcmp("lux", device)) {
+		return "Moto X Play";
+	} else if (!strcmp("harpia", device)) {
+		return "Moto G Play";
+	}
+
+	return "Motorola";
+}
+
+#define BTM_DEF_LOCAL_NAME BtmGetDefaultName()
 #define BTA_DISABLE_DELAY 1000 /* in milliseconds */
-#define BLUETOOTH_QCOM_SW TRUE
-#define BLUETOOTH_QCOM_LE_INTL_SCAN TRUE
-#define BTC_INCLUDED TRUE
+#define BLUETOOTH_QTI_SW TRUE
+#define MAX_L2CAP_CHANNELS    16
+#define BLE_VND_INCLUDED   TRUE
 #endif

@@ -34,6 +34,7 @@ public class CMActionsService extends IntentService implements ScreenStateNotifi
 
     private final DozePulseAction mDozePulseAction;
     private final PowerManager mPowerManager;
+    private final PowerManager.WakeLock mWakeLock;
     private final ScreenReceiver mScreenReceiver;
     private final SensorHelper mSensorHelper;
 
@@ -61,9 +62,18 @@ public class CMActionsService extends IntentService implements ScreenStateNotifi
 
         // Other actions that are always enabled
         mUpdatedStateNotifiers.add(new CameraActivationSensor(cmActionsSettings, mSensorHelper));
-        mUpdatedStateNotifiers.add(new ChopChopSensor(cmActionsSettings, mSensorHelper));
+        if (!Device.isSurnia()){
+            mUpdatedStateNotifiers.add(new ChopChopSensor(cmActionsSettings, mSensorHelper));
+        } else {
+            Log.d(TAG, "No ChopChop");
+        }
+
+        mUpdatedStateNotifiers.add(new ProximitySilencer(cmActionsSettings, context, mSensorHelper));
+        mUpdatedStateNotifiers.add(new FlipToMute(cmActionsSettings, context, mSensorHelper));
+        mUpdatedStateNotifiers.add(new LiftToSilence(cmActionsSettings, context, mSensorHelper));
 
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        mWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CMActionsWakeLock");
         updateState();
     }
 
@@ -73,6 +83,9 @@ public class CMActionsService extends IntentService implements ScreenStateNotifi
 
     @Override
     public void screenTurnedOn() {
+            if (!mWakeLock.isHeld()) {
+                mWakeLock.acquire();
+            }
         for (ScreenStateNotifier screenStateNotifier : mScreenStateNotifiers) {
             screenStateNotifier.screenTurnedOn();
         }
@@ -80,6 +93,9 @@ public class CMActionsService extends IntentService implements ScreenStateNotifi
 
     @Override
     public void screenTurnedOff() {
+            if (mWakeLock.isHeld()) {
+                mWakeLock.release();
+            }
         for (ScreenStateNotifier screenStateNotifier : mScreenStateNotifiers) {
             screenStateNotifier.screenTurnedOff();
         }

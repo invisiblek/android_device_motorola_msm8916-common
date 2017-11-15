@@ -141,8 +141,7 @@
 /dev/msm_vidc_dec_sec     0660   system     audio
 /dev/msm_vidc_enc         0660   system     audio
 /dev/msm_rotator          0660   system     system
-/dev/hw_random            0664   root       root
-/dev/adsprpc-smd          0660   media      camera
+/dev/hw_random            0600   root       root
 
 #permissions for audio
 /dev/audio_slimslave      0660   system     audio
@@ -216,6 +215,12 @@
 /sys/devices/soc.0/78b5000.i2c/i2c-1/1-*            max_latency    0660    input    system
 /sys/devices/soc.0/78b5000.i2c/i2c-1/1-*            flush          0660    input    system
 /sys/devices/soc.0/78b5000.i2c/i2c-1/1-*            calibrate      0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-2/2-*            enable         0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-2/2-*            poll_delay     0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-2/2-*            enable_wakeup  0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-2/2-*            max_latency    0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-2/2-*            flush          0660    input    system
+/sys/devices/soc.0/78b6000.i2c/i2c-2/2-*            calibrate      0660    input    system
 /sys/devices/virtual/optical_sensors/proximity      ps_adc         0660    input    system
 /sys/devices/virtual/optical_sensors/proximity      ps_poll_delay  0660    input    system
 /sys/devices/virtual/optical_sensors/lightsensor    ls_auto        0660    input    system
@@ -230,9 +235,11 @@
 # wlan
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system
+
 #nfc permissions
 /dev/nfc-nci              0660    nfc         nfc
 /dev/assd                 0660    nfc         nfc
+/dev/bcm2079x-i2c         0660    nfc         nfc
 
 # UIO devices
 /dev/uio0                 0660   system     system
@@ -259,12 +266,13 @@
 /dev/isdbt                0660  system     system
 
 # Permissions for tcmd
-/dev/i2c-1                0660   root       system
-/dev/i2c-2                0660   root       system
-/dev/i2c-4                0660   root       system
+/dev/i2c-*                0660   root       system
 
 # HOB
 /dev/mot_hob_ram          0660   radio      radio
 
 # Subsystem Restart Ramdump
 /dev/ramdump*             0660   radio      radio
+
+# haptic
+/dev/drv2605              0660   system     system

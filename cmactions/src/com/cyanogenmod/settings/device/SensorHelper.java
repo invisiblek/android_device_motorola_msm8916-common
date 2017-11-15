@@ -33,6 +33,7 @@ public class SensorHelper {
     private static final int SENSOR_TYPE_MMI_CAMERA_ACTIVATION = 65540;
     private static final int SENSOR_TYPE_MMI_CHOP_CHOP = 65546;
     private static final int SENSOR_TYPE_MMI_FLAT_UP = 65537;
+    private static final int SENSOR_TYPE_MMI_FLAT_DOWN = 65538;
     private static final int SENSOR_TYPE_MMI_STOW = 65539;
 
     private static final int BATCH_LATENCY_IN_MS = 100;
@@ -48,8 +49,7 @@ public class SensorHelper {
 
     private void dumpSensorsList() {
         try {
-            FileOutputStream out = mContext.openFileOutput("sensors.txt",
-                Context.MODE_WORLD_READABLE);
+            FileOutputStream out = mContext.openFileOutput("sensors.txt", Context.MODE_PRIVATE);
             OutputStreamWriter writer = new OutputStreamWriter(out);
 
             List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -73,6 +73,10 @@ public class SensorHelper {
 
     public Sensor getFlatUpSensor() {
         return mSensorManager.getDefaultSensor(SENSOR_TYPE_MMI_FLAT_UP, true);
+    }
+
+    public Sensor getFlatDownSensor() {
+        return mSensorManager.getDefaultSensor(SENSOR_TYPE_MMI_FLAT_DOWN, true);
     }
 
     public Sensor getProximitySensor() {
